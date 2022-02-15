@@ -1,10 +1,9 @@
 package com.entities;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
-//@Table(name = "cars") usata solo se il nome della classe è diverso dal nome dalla tabella di creare
+@Table(name = "cars") //usata solo se il nome della classe è diverso dal nome dalla tabella di creare
 public class Cars  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,21 +23,23 @@ public class Cars  {
     private String year;
 
     @Column
-    private String license_plate;
+    private String licensePlate;
 
     //JOIN TRA TABELLA USERS E RESERVATIONS
     @OneToOne(mappedBy = "Car", cascade = CascadeType.ALL)
     private Reservations reservations;
 
     //constructor
-    public Cars(int id, String type, String manufacturer, String model, String year, String license_plate, Reservations reservations) {
-        this.id = id;
+    public Cars(String type, String manufacturer, String model, String year, String license_plate) {
         this.type = type;
         this.manufacturer = manufacturer;
         this.model = model;
         this.year = year;
-        this.license_plate = license_plate;
-        this.reservations = reservations;
+        this.licensePlate = license_plate;
+    }
+
+    public Cars() {
+
     }
 
     //get and set
@@ -82,12 +83,12 @@ public class Cars  {
         this.year = year;
     }
 
-    public String getLicense_plate() {
-        return license_plate;
+    public String getLicensePlate() {
+        return licensePlate;
     }
 
-    public void setLicense_plate(String license_plate) {
-        this.license_plate = license_plate;
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
     }
 
     public Reservations getReservations() {

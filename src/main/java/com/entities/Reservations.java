@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-//@Table(name = "users") usata solo se il nome della classe è diverso dal nome dalla tabella di creare
+@Table(name = "reservations") //usata solo se il nome della classe è diverso dal nome dalla tabella di creare
 public class Reservations {
 
     @Id
@@ -22,26 +22,29 @@ public class Reservations {
 
 
     //join con tabella USERS
-    @ManyToOne
-    @JoinColumn(name="user_id", nullable = false)
+    @OneToOne
+    @JoinColumn(name="userId", nullable = false)
     private Users User;
 
     //join con tabella CARS
     @OneToOne
-    @JoinColumn(name="car_id", referencedColumnName = "id")
+    @JoinColumn(name="carId", nullable = false)
     private Cars Car;
 
     @Column
     private String status;
 
     //constructor
-    public Reservations(int id, Date start_date, Date end_date, Users user, Cars car, String status) {
-        this.id = id;
+    public Reservations(Date start_date, Date end_date, Users user, Cars car, String status) {
         this.start_date = start_date;
         this.end_date = end_date;
         User = user;
         Car = car;
         this.status = status;
+    }
+
+    public Reservations() {
+
     }
 
     //get and set

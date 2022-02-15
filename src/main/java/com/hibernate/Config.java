@@ -3,7 +3,7 @@ package com.hibernate;
 import com.entities.Cars;
 import com.entities.Reservations;
 import com.entities.Users;
-import com.mysql.cj.xdevapi.SessionFactory;
+import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
@@ -21,7 +21,7 @@ public class Config {
 
                 Properties settings = new Properties();
                 settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-                settings.put(Environment.URL, "jdbc:mysql://localhost:3306/");
+                settings.put(Environment.URL, "jdbc:mysql://localhost:3306/rentalcars?serverTimezone=UTC");
                 settings.put(Environment.USER, "root");
                 settings.put(Environment.PASS, "admin");
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");

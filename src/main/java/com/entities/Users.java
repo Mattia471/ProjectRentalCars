@@ -1,7 +1,6 @@
 package com.entities;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -26,28 +25,32 @@ public class Users {
     @Column
     private String password;
 
-    @Column
-    private String role;
 
     @Temporal(TemporalType.DATE)
     @Column
     private Date birthdate;
 
     //JOIN TRA TABELLA USERS E RESERVATIONS
-    @OneToMany(mappedBy = "User")
-    private List<Reservations> reservations;
+    @OneToOne(mappedBy = "User", cascade = CascadeType.ALL)
+    private Reservations reservations;
+
+    @Column
+    private boolean isAdmin;
 
     //constructor
-    public Users(int id, String name, String surname, String email, String password, String role, Date birthdate, List<Reservations> reservations) {
-        this.id = id;
+    public Users(String name, String surname, String email, String password, Date birthdate) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.isAdmin=false;
         this.birthdate = birthdate;
-        this.reservations = reservations;
     }
+
+    public Users() {
+
+    }
+
 
     //get and set
     public int getId() {
@@ -90,14 +93,6 @@ public class Users {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public Date getBirthdate() {
         return birthdate;
     }
@@ -106,11 +101,28 @@ public class Users {
         this.birthdate = birthdate;
     }
 
-    public List<Reservations> getReservations() {
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
+    public Reservations getReservations() {
         return reservations;
     }
 
-    public void setReservations(List<Reservations> reservations) {
+    public void setReservations(Reservations reservations) {
         this.reservations = reservations;
     }
+
 }
