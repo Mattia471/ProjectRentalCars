@@ -32,7 +32,7 @@ public class Users {
 
     //JOIN TRA TABELLA USERS E RESERVATIONS
     @OneToMany(mappedBy = "User")
-    private Reservations reservations;
+    private List<Reservations> reservations;
 
     @Column
     private boolean isAdmin;
@@ -117,12 +117,11 @@ public class Users {
         this.isAdmin = isAdmin;
     }
 
-    public Reservations getReservations() {
+    public List<Reservations> getReservations() {
         return reservations;
     }
 
-    public void setReservations(Reservations reservations) {
+    public void setReservations(List<Reservations> reservations) {
         this.reservations = reservations;
     }
-
 }
