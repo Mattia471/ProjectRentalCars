@@ -135,9 +135,6 @@ public class ParkServlet extends HttpServlet {
 
             String azione = request.getParameter("azione"); //definisco la variabile passata da jsp per definire l'azione da fare
 
-            if(azione == null){ //condizione quando utente logga in automatico visualizza la lista delle prenotazioni
-                azione="listR";
-            }
 
             switch (azione) { //verifico il contenuto del parametro azione e a seconda del suo contenuto eseguo un azione
 
