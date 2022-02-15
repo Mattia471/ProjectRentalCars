@@ -22,7 +22,7 @@ public class Reservations {
 
 
     //join con tabella USERS
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="userId", nullable = false)
     private Users User;
 
