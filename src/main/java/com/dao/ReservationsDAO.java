@@ -79,7 +79,12 @@ public class ReservationsDAO {
         }
     }
 
+    public static List<Reservations> getReservationsUser(int idUser) {
+        try (Session session = Config.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Reservations as U where userId ="+idUser, Reservations.class).list();
 
+        }
+    }
 
     //recupera lista degli utenti
     public static List<Reservations> getReservations(int idUser) {

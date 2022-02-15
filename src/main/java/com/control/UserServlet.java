@@ -83,11 +83,11 @@ public class UserServlet extends HttpServlet {
                 session.setAttribute("user", userLog); //assegna alla sessione "user" l'email
                 session.setMaxInactiveInterval(5 * 60); //invalidala dopo 5 minuti
 
-            if(userLog.isAdmin()) { //omesso ==true
-                response.sendRedirect("UserServlet"); //accesso eseguito vai alla pagina
-            }else{
-                response.sendRedirect("ParkServlet"); //accesso eseguito vai alla pagina
-            }
+                if(userLog.isAdmin()) { //omesso ==true
+                    response.sendRedirect("UserServlet"); //accesso eseguito vai alla pagina
+                }else{
+                    response.sendRedirect("ParkServlet"); //accesso eseguito vai alla pagina
+                }
 
             }else{
                 response.sendRedirect("login.jsp"); //accesso eseguito vai alla pagina

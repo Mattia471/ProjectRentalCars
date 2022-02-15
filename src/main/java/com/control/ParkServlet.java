@@ -62,20 +62,21 @@ public class ParkServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Users currentUser = (Users) session.getAttribute("user");
 
-        //converto in int
-        int userID= Integer.parseInt(request.getParameter("userID"));
-
-        //creo un oggetto lista e richiamo il metodo statico tramite la classe
-        List<Reservations> reservations = ReservationsDAO.getReservations(userID);
-        request.setAttribute("listReservations", reservations);
 
 
         //controllo se utente admin o customer tramite campo su db bool
         if(currentUser.isAdmin()){
+            //converto in int
+            int userID= Integer.parseInt(request.getParameter("userID"));
+            //creo un oggetto lista e richiamo il metodo statico tramite la classe
+            List<Reservations> reservations = ReservationsDAO.getReservationsUser(userID);
+            request.setAttribute("listReservations", reservations);
             RequestDispatcher dispatcher = request.getRequestDispatcher("list_reservations.jsp");
             dispatcher.forward(request, response);
-
         }else {
+            //creo un oggetto lista e richiamo il metodo statico tramite la classe
+            List<Reservations> reservations = ReservationsDAO.getReservations(currentUser.getId());
+            request.setAttribute("listReservations", reservations);
             RequestDispatcher dispatcher = request.getRequestDispatcher("user_home.jsp"); //a quale file inviare i dati
             dispatcher.forward(request, response);
         }
