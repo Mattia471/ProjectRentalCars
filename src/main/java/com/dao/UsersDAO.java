@@ -95,8 +95,7 @@ public class UsersDAO {
 
         Transaction transaction = null;
         Users users = null;
-        Session session = Config.getSessionFactory().openSession();
-        try{
+        try (Session session = Config.getSessionFactory().openSession()){
             //inizio transazione tra dao e db
             transaction = session.beginTransaction();
             //ottieni valori utente
