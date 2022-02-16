@@ -1,10 +1,12 @@
 package com.dao;
 
 import com.entities.Cars;
+import com.entities.Reservations;
 import com.hibernate.Config;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.Date;
 import java.util.List;
 
 public class CarsDAO {
@@ -29,21 +31,57 @@ public class CarsDAO {
         }
     }
 
-    public static Cars getCarId(String carId) {
-        if (carId != null) {
 
-            //trasforma valore in tipo int tramite integer.
-            int idCar = Integer.parseInt(carId);
-
-            //recupera sessione
-            Session session = Config.getSessionFactory().openSession();
-
-            //invia la richiesta
-            Cars cars =  (Cars) session.get( Cars.class, new Integer(carId) );
-            return cars;
-
+    public static Cars getCarId(String carId){
+        int idCar = Integer.parseInt(carId);
+        try (Session session = Config.getSessionFactory().openSession()) {
+            return session.get(Cars.class, idCar);
         }
-        return null;
+
+    }
+
+    public static void updateCar(Cars cars, String licensePlate, String manufacturer,String model,String type,String year){
+
+        Transaction transaction = null;
+        try (Session session = Config.getSessionFactory().openSession()) {
+
+            // start a transaction
+            transaction = session.beginTransaction();
+
+            // Modifica le informazioni tramite i setter
+            cars.setLicensePlate(licensePlate);
+            cars.setManufacturer(manufacturer);
+            cars.setModel(model);
+            cars.setType(type);
+            cars.setYear(year);
+
+            session.merge(cars);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteCar(String carID){
+
+        Transaction transaction = null;
+        try (Session session = Config.getSessionFactory().openSession()) {
+
+            transaction = session.beginTransaction();
+            Cars cars = getCarId(carID);
+
+            session.delete(cars);
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     //recupera lista delle auto

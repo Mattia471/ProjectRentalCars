@@ -82,6 +82,9 @@
             <th scope="col">Modello</th>
             <th scope="col">Tipo</th>
             <th scope="col">Anno</th>
+            <th scope="col">#</th>
+            <th scope="col">#</th>
+
         </tr>
         </thead>
         <tbody>
@@ -91,6 +94,20 @@
                 <td>${tempCar.model}</td>
                 <td>${tempCar.type}</td>
                 <td>${tempCar.year} </td>
+                <c:choose>
+                    <c:when test="${user.isAdmin}">
+                        <td><form action="ParkServlet" method="GET">
+                            <input type="text" name="azione" value="loadInfoCar" hidden>
+                            <input type="text" name="carID" value="${tempCar.id}" hidden>
+                            <input type="submit" class="btn btn-success" value="Modifica">
+                        </form> </td>
+                        <td><form action="ParkServlet" method="POST">
+                            <input type="text" name="azione" value="deleteCar" hidden>
+                            <input type="text" name="carID" value="${tempCar.id}" hidden>
+                            <input type="submit" class="btn btn-danger" value="Elimina">
+                        </form> </td>
+                    </c:when>
+                </c:choose>
             </tr>
         </c:forEach>
         </tbody>

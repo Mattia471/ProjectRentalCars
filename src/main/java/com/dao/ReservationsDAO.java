@@ -31,11 +31,10 @@ public class ReservationsDAO {
     }
 
     public static Reservations getIDReservation(String reservationId){
-
-
         int ReservationID = Integer.parseInt(reservationId);
-        Session session = Config.getSessionFactory().openSession();
-        return session.get(Reservations.class, ReservationID);
+        try (Session session = Config.getSessionFactory().openSession()) {
+            return session.get(Reservations.class, ReservationID);
+        }
 
     }
 

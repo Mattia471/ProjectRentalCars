@@ -52,6 +52,9 @@ public class ParkServlet extends HttpServlet {
                     loadReservation(request, response);
                     break;
 
+                case "loadInfoCar":
+                    loadInfoCar(request, response);
+                    break;
             }
 
         } catch (Exception e) { //se il codice da errori entra in questo blocco di codici e mostra l'errore
@@ -102,6 +105,18 @@ public class ParkServlet extends HttpServlet {
 
         request.setAttribute("infoReservation", reservations);
         RequestDispatcher dispatcher = request.getRequestDispatcher("edit_reservation.jsp");
+        dispatcher.forward(request, response);
+
+    }
+
+    private void loadInfoCar(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String carID = request.getParameter("carID");
+
+        Cars cars = CarsDAO.getCarId(carID);
+
+        request.setAttribute("infoCar", cars);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("edit_car.jsp");
         dispatcher.forward(request, response);
 
     }
@@ -181,6 +196,14 @@ public class ParkServlet extends HttpServlet {
                 case "editReservation":
                     updateReservation(request, response);
                     break;
+
+                case "updateCar":
+                    updateCar(request, response);
+                    break;
+
+                case "deleteCar":
+                    deleteCar(request, response);
+                    break;
             }
 
         } catch (Exception e) { //se il codice da errori entra in questo blocco di codici e mostra l'errore
@@ -240,7 +263,6 @@ public class ParkServlet extends HttpServlet {
         //lettura dati inviati da form
         String startDate= request.getParameter("newStartDate");
         String endDate= request.getParameter("newEndDate");
-        String reservationID= request.getParameter("reservationID");
 
         // converte le date
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -279,5 +301,37 @@ public class ParkServlet extends HttpServlet {
 
         response.sendRedirect("UserServlet?azione=list");
 
+    }
+
+
+    private void updateCar(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        //lettura dati inviati da form
+        String licensePlate= request.getParameter("licensePlate");
+        String manufacturer= request.getParameter("manufacturer");
+        String model= request.getParameter("model");
+        String type= request.getParameter("type");
+        String year= request.getParameter("year");
+
+
+        // recupera l'id della prenotazione
+        Cars updateCar = CarsDAO.getCarId(request.getParameter("carID"));
+
+        CarsDAO.updateCar(updateCar,licensePlate,manufacturer,model,type,year);
+
+
+        response.sendRedirect("ParkServlet?azione=listC");
+
+    }
+
+    private void deleteCar(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        //lettura dati inviati da form
+        String carID= request.getParameter("carID");
+
+        CarsDAO.deleteCar(carID);
+
+        response.sendRedirect("ParkServlet?azione=listC");
+        return;
     }
 }

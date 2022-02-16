@@ -57,6 +57,7 @@ public class UsersDAO {
     public static void deleteUser(String userID){
 
         Transaction transaction = null;
+
         try (Session session = Config.getSessionFactory().openSession()) {
 
             transaction = session.beginTransaction();
@@ -77,10 +78,11 @@ public class UsersDAO {
 
     public static Users getUser(String userID) {
         int userId = Integer.parseInt(userID);
-        Session session = Config.getSessionFactory().openSession();
-        return session.get(Users.class, userId);
-
+        try (Session session = Config.getSessionFactory().openSession()) {
+            return session.get(Users.class, userId);
+        }
     }
+
     //recupera lista degli utenti
     public static List<Users> getUsers() {
         try (Session session = Config.getSessionFactory().openSession()) {
