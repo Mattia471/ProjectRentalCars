@@ -1,6 +1,7 @@
 package com.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "cars") //usata solo se il nome della classe è diverso dal nome dalla tabella di creare
@@ -25,9 +26,10 @@ public class Cars  {
     @Column
     private String licensePlate;
 
-    //JOIN TRA TABELLA USERS E RESERVATIONS
-    @OneToOne(mappedBy = "Car", cascade = CascadeType.ALL)
-    private Reservations reservations;
+    //JOIN TRA TABELLA CARS E RESERVATIONS
+    @OneToMany(mappedBy = "Car", cascade = CascadeType.ALL)
+    private List<Reservations> reservations;
+
 
     //constructor
     public Cars(String type, String manufacturer, String model, String year, String license_plate) {
@@ -91,11 +93,11 @@ public class Cars  {
         this.licensePlate = licensePlate;
     }
 
-    public Reservations getReservations() {
+    public List<Reservations> getReservations() {
         return reservations;
     }
 
-    public void setReservations(Reservations reservations) {
+    public void setReservations(List<Reservations> reservations) {
         this.reservations = reservations;
     }
 }

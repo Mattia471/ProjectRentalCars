@@ -7,6 +7,7 @@ import com.hibernate.Config;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.Date;
 import java.util.List;
 
 public class ReservationsDAO {
@@ -37,6 +38,30 @@ public class ReservationsDAO {
         return session.get(Reservations.class, ReservationID);
 
     }
+
+
+    public static void updateReservation(Reservations reservations, Date startDate, Date endDate){
+
+        Transaction transaction = null;
+        try (Session session = Config.getSessionFactory().openSession()) {
+
+            // start a transaction
+            transaction = session.beginTransaction();
+
+            // Modifica le informazioni tramite i setter
+            reservations.setStart_date(startDate);
+            reservations.setEnd_date(endDate);
+
+            session.merge(reservations);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
 
     public static void deleteReservation(String reservationID){
 

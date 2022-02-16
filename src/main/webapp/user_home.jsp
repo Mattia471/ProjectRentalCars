@@ -75,17 +75,40 @@
             </tr>
         </thead>
         <tbody>
+
         <c:forEach var="tempReservation" items="${listReservations}"> <!--UTILIZZARE JSTL SU JSP-->
             <tr>
+                <!--tramite parseNumber assegno ad una variabile differenceDays la differenza tra la data di inizio noleggio e la data di oggi passata da servlet now diviso per (secondi*minuti*ore)/1000 ottenendo i millisecondi-->
+                <fmt:parseNumber var="differenceDays" value="${((tempReservation.start_date.time - now.time) / (1000*60*60*24)) /10 }" />
                 <th scope="row">1</th>
-                <td>Dal ${tempReservation.start_date} al ${tempReservation.end_date}</td>
-                <td><span class="badge badge-sm bg-danger">${tempReservation.status}</span> </td>
-                <td><a href="#" >modifica</a></td>
-                <td><form action="ParkServlet" method="POST">
-                    <input type="text" name="azione" value="deleteReservation" hidden>
-                    <input type="text" name="reservationID" value="${tempReservation.id}" hidden>
-                    <input type="submit" class="btn btn-danger" value="Elimina">
-                </form> </td>
+                <td>Dal ${tempReservation.start_date} al ${tempReservation.end_date} </td>
+                <td>
+                <c:choose>
+                    <c:when test="${tempReservation.status != 'CONFERMATO'}">
+                        <span class="badge badge-sm bg-danger">${tempReservation.status}</span>
+                    </c:when>
+                    <c:otherwise>
+                        <span class="badge badge-sm bg-success">${tempReservation.status}</span>
+                    </c:otherwise>
+                </c:choose>
+                </td>
+                <c:choose>
+                    <c:when test="${differenceDays >= 2}"> <!--CONTROLLO SE I GIORNI RIMANENTI SONO PIU' O MENO DI 2-->
+                        <td><form action="ParkServlet" method="GET">
+                            <input type="text" name="azione" value="loadReservation" hidden>
+                            <input type="text" name="reservationID" value="${tempReservation.id}" hidden>
+                            <input type="submit" class="btn btn-success" value="Modifica">
+                        </form> </td>
+                        <td><form action="ParkServlet" method="POST">
+                            <input type="text" name="azione" value="deleteReservation" hidden>
+                            <input type="text" name="reservationID" value="${tempReservation.id}" hidden>
+                            <input type="submit" class="btn btn-danger" value="Elimina">
+                        </form> </td>
+                    </c:when>
+                    <c:otherwise>
+                        <td></td>
+                    </c:otherwise>
+                </c:choose>
             </tr>
         </c:forEach>
         </tbody>

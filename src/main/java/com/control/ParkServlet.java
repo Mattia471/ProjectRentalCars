@@ -2,6 +2,7 @@ package com.control;
 
 import com.dao.CarsDAO;
 import com.dao.ReservationsDAO;
+import com.dao.UsersDAO;
 import com.entities.Cars;
 import com.entities.Reservations;
 import com.entities.Users;
@@ -47,6 +48,10 @@ public class ParkServlet extends HttpServlet {
                     loadCar(request, response);
                     break;
 
+                case "loadReservation":
+                    loadReservation(request, response);
+                    break;
+
             }
 
         } catch (Exception e) { //se il codice da errori entra in questo blocco di codici e mostra l'errore
@@ -74,12 +79,31 @@ public class ParkServlet extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("list_reservations.jsp");
             dispatcher.forward(request, response);
         }else {
+            //assegno alla data la data di oggi per utilizzarlo in jstl nel calcolo della diferrenza di data
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date now = format.parse(format.format(new Date()));
+            request.setAttribute("now", now);
+
             //creo un oggetto lista e richiamo il metodo statico tramite la classe
             List<Reservations> reservations = ReservationsDAO.getReservations(currentUser.getId());
             request.setAttribute("listReservations", reservations);
             RequestDispatcher dispatcher = request.getRequestDispatcher("user_home.jsp"); //a quale file inviare i dati
             dispatcher.forward(request, response);
         }
+
+
+    }
+
+    private void loadReservation(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String reservationID = request.getParameter("reservationID");
+
+        Reservations reservations = ReservationsDAO.getIDReservation(reservationID);
+
+        request.setAttribute("infoReservation", reservations);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("edit_reservation.jsp");
+        dispatcher.forward(request, response);
+
     }
 
     private void listCar(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -154,6 +178,9 @@ public class ParkServlet extends HttpServlet {
                     confirmedReservation(request, response);
                     break;
 
+                case "editReservation":
+                    updateReservation(request, response);
+                    break;
             }
 
         } catch (Exception e) { //se il codice da errori entra in questo blocco di codici e mostra l'errore
@@ -206,6 +233,28 @@ public class ParkServlet extends HttpServlet {
 
         response.sendRedirect("ParkServlet?azione=listC");
         return;
+    }
+
+    private void updateReservation(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        //lettura dati inviati da form
+        String startDate= request.getParameter("newStartDate");
+        String endDate= request.getParameter("newEndDate");
+        String reservationID= request.getParameter("reservationID");
+
+        // converte le date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date startD = format.parse(startDate);
+        Date endD = format.parse(endDate);
+
+        // recupera l'id della prenotazione
+        Reservations updateReservation = ReservationsDAO.getIDReservation(request.getParameter("reservationID"));
+
+        ReservationsDAO.updateReservation(updateReservation, startD, endD);
+
+
+        response.sendRedirect("ParkServlet?azione=listR");
+
     }
 
     private void deleteReservation(HttpServletRequest request, HttpServletResponse response) throws Exception {

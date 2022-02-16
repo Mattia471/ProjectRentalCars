@@ -63,14 +63,14 @@
 
 <div class="container-fluid">
     <div class="row" style="padding-top: 10px">
-        <div class="col">
-            <h2>Lista utenti:</h2>
+        <div class="col-8">
+            <b>Benvenuto ${user.name} ${user.surname}</b>
         </div>
         <div class="col">
             <a href="add_user.jsp" class="btn btn-dark" style="position: absolute;right: 10px">Nuovo utente</a>
         </div>
     </div>
-
+<hr>
     <table class="table" >
         <thead class="thead-dark table-striped">
         <tr>
@@ -87,7 +87,11 @@
                 <td>${tempUser.name}</td>
                 <td>${tempUser.surname}</td>
                 <td>${tempUser.email}</td>
-                <td><a href="#" class="btn btn-success btn-xs">modifica</a></td>
+                <td><form action="UserServlet" method="GET">
+                    <input type="text" name="azione" value="loadUser" hidden>
+                    <input type="text" name="userID" value="${tempUser.id}" hidden>
+                    <input type="submit" class="btn btn-success" value="Modifica">
+                </form> </td>
                 <td><form action="UserServlet" method="POST">
                     <input type="text" name="azione" value="deleteUser" hidden>
                     <input type="text" name="userID" value="${tempUser.id}" hidden>

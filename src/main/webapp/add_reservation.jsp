@@ -26,9 +26,18 @@
     <div class="collapse navbar-collapse " id="navbarSupportedContent" style="padding-left: 35%">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <c:url var="userHome" value="ParkServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
-                    <c:param name="azione" value="listR"/>
-                </c:url>
+                <c:choose>
+                    <c:when test="${user.isAdmin}">
+                        <c:url var="userHome" value="UserServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
+                            <c:param name="azione" value="list"/>
+                        </c:url>
+                    </c:when>
+                    <c:otherwise>
+                        <c:url var="userHome" value="ParkServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
+                            <c:param name="azione" value="listR"/>
+                        </c:url>
+                    </c:otherwise>
+                </c:choose>
                 <a class="nav-link text-white" href="${userHome}"><fmt:message key="header.button2" /></a>
             </li>
             <li class="nav-item">
@@ -59,11 +68,11 @@
             <div class="row" style="padding-top: 20px">
                 <div class="col">
                     <b>Data di inizio noleggio</b>
-                    <input type="date"  name="endDate" class="form-control" required>
+                    <input type="date"  name="startDate" class="form-control" required>
                 </div>
                 <div class="col">
                     <b>Data di consegna</b>
-                    <input type="date" name="startDate" class="form-control" required>
+                    <input type="date" name="endDate" class="form-control" required>
                 </div>
             </div>
 

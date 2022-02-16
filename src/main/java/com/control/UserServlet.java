@@ -38,6 +38,10 @@ public class UserServlet extends HttpServlet {
                     viewProfile(request, response);
                     break;
 
+                case "loadUser":
+                    loadUser(request, response);
+                    break;
+
                 case "logout":
                     logout(request, response);
                     break;
@@ -61,8 +65,21 @@ public class UserServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         Users users = (Users) session.getAttribute("user");
+
         request.setAttribute("user", users);
         RequestDispatcher dispatcher = request.getRequestDispatcher("users_profile.jsp");
+        dispatcher.forward(request, response);
+
+    }
+
+    private void loadUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String userId = request.getParameter("userID");
+
+        Users users = UsersDAO.getUser(userId);
+
+        request.setAttribute("accountUser", users);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("update_user.jsp");
         dispatcher.forward(request, response);
 
     }
@@ -111,13 +128,29 @@ public class UserServlet extends HttpServlet {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try { //viene eseguito il codice all'interno se c'è un errore si interrompe e passa al catch
 
             String azione = request.getParameter("azione"); //definisco la variabile passata da jsp per definire l'azione da fare
 
-           
+
 
             switch (azione) { //verifico il contenuto del parametro azione e a seconda del suo contenuto eseguo un azione
 
@@ -163,6 +196,11 @@ public class UserServlet extends HttpServlet {
 
     private void updateUser(HttpServletRequest request, HttpServletResponse response) throws Exception{
 
+        //Recuperi la sessione dell'utente
+        HttpSession session = request.getSession();
+        Users currentUser = (Users) session.getAttribute("user");
+
+
         String name = request.getParameter("name");
         String surname = request.getParameter("surname");
         String email = request.getParameter("email");
@@ -172,8 +210,11 @@ public class UserServlet extends HttpServlet {
 
         UsersDAO.updateUser(updateUsers, name, surname, email, password);
 
-
-        response.sendRedirect("UserServlet?azione=profile");
+        if(currentUser.isAdmin()){
+            response.sendRedirect("UserServlet?azione=list");
+        }else {
+            response.sendRedirect("UserServlet?azione=profile");
+        }
 
     }
 
@@ -187,4 +228,6 @@ public class UserServlet extends HttpServlet {
         response.sendRedirect("UserServlet?azione=list");
         return;
     }
+
+
 }

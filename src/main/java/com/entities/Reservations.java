@@ -27,7 +27,7 @@ public class Reservations {
     private Users User;
 
     //join con tabella CARS
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="carId", nullable = false)
     private Cars Car;
 
