@@ -33,7 +33,7 @@
                         </c:url>
                     </c:when>
                     <c:otherwise>
-                        <c:url var="userHome" value="ParkServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
+                        <c:url var="userHome" value="ReservationServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
                             <c:param name="azione" value="listR"/>
                         </c:url>
                     </c:otherwise>

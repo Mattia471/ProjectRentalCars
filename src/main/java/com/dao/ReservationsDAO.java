@@ -1,8 +1,6 @@
 package com.dao;
 
-import com.entities.Cars;
 import com.entities.Reservations;
-import com.entities.Users;
 import com.hibernate.Config;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -48,8 +46,8 @@ public class ReservationsDAO {
             transaction = session.beginTransaction();
 
             // Modifica le informazioni tramite i setter
-            reservations.setStart_date(startDate);
-            reservations.setEnd_date(endDate);
+            reservations.setStartDate(startDate);
+            reservations.setEndDate(endDate);
 
             session.merge(reservations);
             transaction.commit();
@@ -81,6 +79,9 @@ public class ReservationsDAO {
         }
     }
 
+
+
+
     public static void confirmedReservation(Reservations confirmed,String conferma){
 
         Transaction transaction = null;
@@ -103,12 +104,27 @@ public class ReservationsDAO {
         }
     }
 
+
+    public static List<Reservations> getReservationCar(int idCar) {
+        try (Session session = Config.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Reservations as U where carId ="+idCar, Reservations.class).list();
+
+        }
+    }
+
+
+
+
     public static List<Reservations> getReservationsUser(int idUser) {
         try (Session session = Config.getSessionFactory().openSession()) {
             return session.createQuery("FROM Reservations as U where userId ="+idUser, Reservations.class).list();
 
         }
     }
+
+
+
+
 
     //recupera lista degli utenti
     public static List<Reservations> getReservations(int idUser) {

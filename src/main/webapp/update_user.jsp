@@ -91,7 +91,8 @@
     </div><br>
     <div class="row">
       <input type="text" value="${accountUser.id}" name="userId" hidden>
-      <input type="text" name="azione" hidden value="updateUser">
+      <input type="text" name="comando" value="edit" hidden>
+      <input type="text" name="azione" value="manageUser" hidden>
       <input type="submit" value="Salve Modifiche" class="form-control btn btn-success">
     </div>
   </form>

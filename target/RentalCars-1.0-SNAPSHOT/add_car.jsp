@@ -101,7 +101,8 @@
                     <input type="submit" class="form-control btn btn-success" value="Inserisci nuova auto">
                 </div>
             </div>
-            <input type="text" name="azione" value="addCar" hidden>
+            <input type="text" name="comando" value="add" hidden>
+            <input type="text" name="azione" value="manageCar" hidden>
         </form>
     </div>
 </body>

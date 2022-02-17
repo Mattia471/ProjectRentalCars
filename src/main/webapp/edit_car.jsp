@@ -102,7 +102,8 @@
                 </div>
             </div>
             <input type="text" name="carID" value="${infoCar.id}" hidden>
-            <input type="text" name="azione" value="updateCar" hidden>
+            <input type="text" name="comando" value="edit" hidden>
+            <input type="text" name="azione" value="manageCar" hidden>
         </form>
     </div>
 </body>

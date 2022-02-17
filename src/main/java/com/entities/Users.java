@@ -31,7 +31,7 @@ public class Users {
     private Date birthdate;
 
     //JOIN TRA TABELLA USERS E RESERVATIONS
-    @OneToMany(mappedBy = "User", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Reservations> reservations;
 
     @Column

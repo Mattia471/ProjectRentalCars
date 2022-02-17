@@ -25,7 +25,7 @@
     <div class="collapse navbar-collapse " id="navbarSupportedContent" style="padding-left: 35%">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <c:url var="userHome" value="ParkServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
+                <c:url var="userHome" value="ReservationServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
                     <c:param name="azione" value="listR"/>
                 </c:url>
                 <a class="nav-link text-white" href="${userHome}"><fmt:message key="header.button2" /></a>
@@ -57,13 +57,9 @@
             <b style="font-size: 25px">Prenotazioni </b>
         </div>
         <div class="col">
-            <c:url var="newR" value="ParkServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
-                <c:param name="azione" value="loadCar"/>
-            </c:url>
-            <a href="${newR}" class="btn btn-dark" style="position: absolute;right: 10px">Nuova Prenotazione</a>
+            <a href="request_add_reservation.jsp" class="btn btn-dark" style="position: absolute;right: 10px">Nuova Prenotazione</a>
         </div>
     </div>
-
     <table class="table" >
         <thead class="thead-dark table-striped">
             <tr>
@@ -76,12 +72,14 @@
         </thead>
         <tbody>
 
+
+
         <c:forEach var="tempReservation" items="${listReservations}"> <!--UTILIZZARE JSTL SU JSP-->
             <tr>
                 <!--tramite parseNumber assegno ad una variabile differenceDays la differenza tra la data di inizio noleggio e la data di oggi passata da servlet now diviso per (secondi*minuti*ore)/1000 ottenendo i millisecondi-->
-                <fmt:parseNumber var="differenceDays" value="${((tempReservation.start_date.time - now.time) / (1000*60*60*24)) /10 }" />
+                <fmt:parseNumber var="differenceDays" value="${((tempReservation.startDate.time - now.time) / (1000*60*60*24)) /10 }" />
                 <th scope="row">1</th>
-                <td>Dal ${tempReservation.start_date} al ${tempReservation.end_date} </td>
+                <td>Dal ${tempReservation.startDate} al ${tempReservation.endDate} </td>
                 <td>
                 <c:choose>
                     <c:when test="${tempReservation.status != 'CONFERMATO'}">
@@ -94,12 +92,12 @@
                 </td>
                 <c:choose>
                     <c:when test="${differenceDays >= 2}"> <!--CONTROLLO SE I GIORNI RIMANENTI SONO PIU' O MENO DI 2-->
-                        <td><form action="ParkServlet" method="GET">
+                        <td><form action="ReservationServlet" method="GET">
                             <input type="text" name="azione" value="loadReservation" hidden>
                             <input type="text" name="reservationID" value="${tempReservation.id}" hidden>
                             <input type="submit" class="btn btn-success" value="Modifica">
                         </form> </td>
-                        <td><form action="ParkServlet" method="POST">
+                        <td><form action="ReservationServlet" method="POST">
                             <input type="text" name="azione" value="deleteReservation" hidden>
                             <input type="text" name="reservationID" value="${tempReservation.id}" hidden>
                             <input type="submit" class="btn btn-danger" value="Elimina">
@@ -111,6 +109,7 @@
                 </c:choose>
             </tr>
         </c:forEach>
+
         </tbody>
     </table>
 </div>

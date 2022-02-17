@@ -33,7 +33,7 @@
                         </c:url>
                     </c:when>
                     <c:otherwise>
-                        <c:url var="userHome" value="ParkServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
+                        <c:url var="userHome" value="ReservationServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
                             <c:param name="azione" value="listR"/>
                         </c:url>
                     </c:otherwise>
@@ -96,7 +96,8 @@
                     <input type="submit" class="form-control btn btn-success" value="Inserisci nuovo utente">
                 </div>
             </div>
-            <input type="text" name="azione" value="addUser" hidden>
+            <input type="text" name="comando" value="add" hidden>
+            <input type="text" name="azione" value="manageUser" hidden>
         </form>
     </div>
 </body>

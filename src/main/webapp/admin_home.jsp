@@ -33,7 +33,7 @@
                         </c:url>
                     </c:when>
                     <c:otherwise>
-                        <c:url var="userHome" value="ParkServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
+                        <c:url var="userHome" value="ReservationServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
                             <c:param name="azione" value="listR"/>
                         </c:url>
                     </c:otherwise>
@@ -97,7 +97,7 @@
                     <input type="text" name="userID" value="${tempUser.id}" hidden>
                     <input type="submit" class="btn btn-danger" value="Elimina">
                 </form> </td>
-                <td><form action="ParkServlet" method="GET">
+                <td><form action="ReservationServlet" method="GET">
                     <input type="text" name="userID" value="${tempUser.id}" hidden>
                     <input type="text" name="azione" value="listR" hidden>
                     <input type="submit" class="btn btn-info text-white" value="Visualizza prenotazioni">

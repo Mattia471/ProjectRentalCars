@@ -27,7 +27,7 @@ public class Cars  {
     private String licensePlate;
 
     //JOIN TRA TABELLA CARS E RESERVATIONS
-    @OneToMany(mappedBy = "Car", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private List<Reservations> reservations;
 
 

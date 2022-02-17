@@ -14,32 +14,32 @@ public class Reservations {
 
     @Temporal(TemporalType.DATE)
     @Column
-    private Date start_date;
+    private Date startDate;
 
     @Temporal(TemporalType.DATE)
     @Column
-    private Date end_date;
+    private Date endDate;
 
 
     //join con tabella USERS
     @ManyToOne
     @JoinColumn(name="userId", nullable = false)
-    private Users User;
+    private Users user;
 
     //join con tabella CARS
     @ManyToOne
     @JoinColumn(name="carId", nullable = false)
-    private Cars Car;
+    private Cars car;
 
     @Column
     private String status;
 
     //constructor
-    public Reservations(Date start_date, Date end_date, Users user, Cars car, String status) {
-        this.start_date = start_date;
-        this.end_date = end_date;
-        User = user;
-        Car = car;
+    public Reservations(Date startDate, Date endDate, Users user, Cars car, String status) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.user = user;
+        this.car = car;
         this.status = status;
     }
 
@@ -56,36 +56,36 @@ public class Reservations {
         this.id = id;
     }
 
-    public Date getStart_date() {
-        return start_date;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStart_date(Date start_date) {
-        this.start_date = start_date;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getEnd_date() {
-        return end_date;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setEnd_date(Date end_date) {
-        this.end_date = end_date;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public Users getUser() {
-        return User;
+        return user;
     }
 
     public void setUser(Users user) {
-        User = user;
+        user = user;
     }
 
     public Cars getCar() {
-        return Car;
+        return car;
     }
 
     public void setCar(Cars car) {
-        Car = car;
+        car = car;
     }
 
     public String getStatus() {

@@ -12,7 +12,7 @@
 <fmt:setBundle basename="labels" />
 <html>
 <head>
-    <title>Home</title>
+    <title>Nuova Prenotazione</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
 </head>
@@ -61,52 +61,35 @@
 
 
 
-<div class="container-fluid">
-    <div class="row" style="padding-top: 10px">
-        <div class="col-8">
-            <b>Benvenuto ${user.name} ${user.surname}</b>
-        </div>
-        <div class="col">
-            <a href="add_user.jsp" class="btn btn-dark" style="position: absolute;right: 10px">Nuovo utente</a>
-        </div>
-    </div>
-<hr>
-    <table class="table" >
-        <thead class="thead-dark table-striped">
-        <tr>
-            <th scope="col">Nome</th>
-            <th scope="col">Cognome</th>
-            <th scope="col">Email</th>
-            <th scope="col">#</th>
-            <th scope="col">#</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="tempUser" items="${listUsers}"> <!--UTILIZZARE JSTL SU JSP-->
-            <tr>
-                <td>${tempUser.name}</td>
-                <td>${tempUser.surname}</td>
-                <td>${tempUser.email}</td>
-                <td><form action="UserServlet" method="GET">
-                    <input type="text" name="azione" value="loadUser" hidden>
-                    <input type="text" name="userID" value="${tempUser.id}" hidden>
-                    <input type="submit" class="btn btn-success" value="Modifica">
-                </form> </td>
-                <td><form action="UserServlet" method="POST">
-                    <input type="text" name="azione" value="deleteUser" hidden>
-                    <input type="text" name="userID" value="${tempUser.id}" hidden>
-                    <input type="submit" class="btn btn-danger" value="Elimina">
-                </form> </td>
-                <td><form action="ReservationServlet" method="GET">
-                    <input type="text" name="userID" value="${tempUser.id}" hidden>
-                    <input type="text" name="azione" value="listR" hidden>
-                    <input type="submit" class="btn btn-info text-white" value="Visualizza prenotazioni">
-                </form> </td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-</div>
 
+
+
+
+    <div class="container">
+        <h2 class="text-center">Scegli le date in cui noleggiare un auto</h2>
+
+
+
+        <form action="ParkServlet" method="GET">
+            <div class="row" style="padding-top: 20px">
+                <div class="col">
+                    <b>Data di inizio noleggio</b>
+                    <input type="date"  name="startDate" class="form-control" required>
+                </div>
+                <div class="col">
+                    <b>Data di consegna</b>
+                    <input type="date" name="endDate" class="form-control" required>
+                </div>
+            </div>
+
+            <br>
+            <div class="row">
+                <div class="col">
+                    <input type="submit" class="form-control btn btn-success" value="Scegli l'auto da noleggiare">
+                </div>
+            </div>
+            <input type="text" name="azione" value="requestSearchCars" hidden>
+        </form>
+    </div>
 </body>
 </html>

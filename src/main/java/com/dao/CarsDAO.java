@@ -1,7 +1,6 @@
 package com.dao;
 
 import com.entities.Cars;
-import com.entities.Reservations;
 import com.hibernate.Config;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -88,6 +87,18 @@ public class CarsDAO {
     public static List<Cars> getCars() {
         try (Session session = Config.getSessionFactory().openSession()) {
             return session.createQuery("FROM Cars ", Cars.class).list();
+
+        }
+    }
+
+
+    //recupera lista delle auto disponibili
+    public static List<Cars> getCarsAvailable(Date endD, Date startD) {
+        try (Session session = Config.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Cars as C where not exists (from Reservations as R where R.car = C and R.startDate<= :startD and R.endDate>= :endD)", Cars.class)
+                    .setParameter("startD", startD)
+                    .setParameter("endD", endD)
+                    .list();
 
         }
     }

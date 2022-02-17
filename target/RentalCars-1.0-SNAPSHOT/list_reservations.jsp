@@ -27,7 +27,7 @@
       <li class="nav-item">
         <c:choose>
           <c:when test="${user.isAdmin}">
-            <c:url var="userHome" value="UserServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
+            <c:url var="userHome" value="ReservationServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
               <c:param name="azione" value="list"/>
             </c:url>
           </c:when>
@@ -79,13 +79,13 @@
     <c:forEach var="tempReservation" items="${listReservations}"> <!--UTILIZZARE JSTL SU JSP-->
       <tr>
         <th scope="row">1</th>
-        <td>Dal ${tempReservation.start_date} al ${tempReservation.end_date}</td>
+        <td>Dal ${tempReservation.startDate} al ${tempReservation.endDate}</td>
         <c:choose>
           <c:when test="${tempReservation.status=='IN ATTESA'}">
             <c:url var="userHome" value="UserServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
               <c:param name="azione" value="list"/>
             </c:url>
-            <form action="ParkServlet" METHOD="post">
+            <form action="ReservationServlet" METHOD="post">
               <input type="text" name="azione" value="confirmedReservation" hidden>
               <input type="text" name="reservationID" value="${tempReservation.id}" hidden>
               <td><input type="submit" name="conferma" value="CONFERMATO" class="btn btn-success" >| <input type="submit" name="conferma" value="RIFIUTATO"  class="btn btn-danger" ></td>

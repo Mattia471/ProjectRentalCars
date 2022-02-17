@@ -28,17 +28,6 @@ public class ParkServlet extends HttpServlet {
             }
 
             switch (azione) { //verifico il contenuto del parametro azione e a seconda del suo contenuto eseguo un azione
-                case "listR":
-                    listReservations(request, response);
-                    break;
-
-                case "addReservation":
-                    addUserReservation(request, response);
-                    break;
-
-                case "addCar":
-                    addCar(request, response);
-                    break;
 
                 case "listC":
                     listCar(request, response);
@@ -48,13 +37,15 @@ public class ParkServlet extends HttpServlet {
                     loadCar(request, response);
                     break;
 
-                case "loadReservation":
-                    loadReservation(request, response);
-                    break;
-
                 case "loadInfoCar":
                     loadInfoCar(request, response);
                     break;
+
+                case "requestSearchCars":
+                    requestSearchCars(request, response);
+                    break;
+
+
             }
 
         } catch (Exception e) { //se il codice da errori entra in questo blocco di codici e mostra l'errore
@@ -64,50 +55,7 @@ public class ParkServlet extends HttpServlet {
 
 
 
-    private void listReservations(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        //Recuperi la sessione dell'utente
-        HttpSession session = request.getSession();
-        Users currentUser = (Users) session.getAttribute("user");
-
-
-
-        //controllo se utente admin o customer tramite campo su db bool
-        if(currentUser.isAdmin()){
-            //converto in int
-            int userID= Integer.parseInt(request.getParameter("userID"));
-            //creo un oggetto lista e richiamo il metodo statico tramite la classe
-            List<Reservations> reservations = ReservationsDAO.getReservationsUser(userID);
-            request.setAttribute("listReservations", reservations);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("list_reservations.jsp");
-            dispatcher.forward(request, response);
-        }else {
-            //assegno alla data la data di oggi per utilizzarlo in jstl nel calcolo della diferrenza di data
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date now = format.parse(format.format(new Date()));
-            request.setAttribute("now", now);
-
-            //creo un oggetto lista e richiamo il metodo statico tramite la classe
-            List<Reservations> reservations = ReservationsDAO.getReservations(currentUser.getId());
-            request.setAttribute("listReservations", reservations);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("user_home.jsp"); //a quale file inviare i dati
-            dispatcher.forward(request, response);
-        }
-
-
-    }
-
-    private void loadReservation(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        String reservationID = request.getParameter("reservationID");
-
-        Reservations reservations = ReservationsDAO.getIDReservation(reservationID);
-
-        request.setAttribute("infoReservation", reservations);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("edit_reservation.jsp");
-        dispatcher.forward(request, response);
-
-    }
 
     private void loadInfoCar(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -134,6 +82,38 @@ public class ParkServlet extends HttpServlet {
         request.setAttribute("listCar", cars);
         RequestDispatcher dispatcher = request.getRequestDispatcher("add_reservation.jsp"); //a quale file inviare i dati
         dispatcher.forward(request, response);
+    }
+
+
+    private void requestSearchCars(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        //lettura dati inviati da form
+        String startDate= request.getParameter("startDate");
+        String endDate= request.getParameter("endDate");
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date endD = format.parse(endDate);
+        Date startD = format.parse(startDate);
+
+
+        if(startD.before(endD) && endD.after(startD)){ //se la data di inizio e prima della data di fine e viceversa
+
+            List<Cars> cars = CarsDAO.getCarsAvailable(endD,startD);
+            request.setAttribute("listCar", cars);
+            request.setAttribute("startDate", startDate);
+            request.setAttribute("endDate", endDate);
+            // Send to jsp page
+            RequestDispatcher dispatcher =request.getRequestDispatcher("add_reservation.jsp");
+            dispatcher.forward(request, response);
+        }else{ //altrimenti
+            String errorLog= "Date inserite non valide, per favore reinseriscile correttamente!";
+            request.setAttribute("errorLog", errorLog);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("page_error.jsp");
+            dispatcher.forward(request, response);
+        }
+
+
     }
 
 
@@ -177,28 +157,8 @@ public class ParkServlet extends HttpServlet {
 
             switch (azione) { //verifico il contenuto del parametro azione e a seconda del suo contenuto eseguo un azione
 
-                case "addReservation":
-                    addUserReservation(request, response);
-                    break;
-
-                case "addCar":
-                    addCar(request, response);
-                    break;
-
-                case "deleteReservation":
-                    deleteReservation(request, response);
-                    break;
-
-                case "confirmedReservation":
-                    confirmedReservation(request, response);
-                    break;
-
-                case "editReservation":
-                    updateReservation(request, response);
-                    break;
-
-                case "updateCar":
-                    updateCar(request, response);
+                case "manageCar":
+                    manageCar(request, response);
                     break;
 
                 case "deleteCar":
@@ -213,35 +173,12 @@ public class ParkServlet extends HttpServlet {
 
 
 
-    private void addUserReservation(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        //Recuperi la sessione dell'utente
-        HttpSession session = request.getSession();
-        Users currentUser = (Users) session.getAttribute("user");
-
-        //lettura dati inviati da form
-        String startDate= request.getParameter("startDate");
-        String endDate= request.getParameter("endDate");
-        String car= request.getParameter("car");
-
-        // converte le date
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date endD = format.parse(startDate);
-        Date startD = format.parse(endDate);
 
 
-        // recupera l'id del veicolo
-        Cars cars = CarsDAO.getCarId(request.getParameter("car"));
+    private void manageCar(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        //crea l'istanza per l'inserimento
-        Reservations reservations = new Reservations(endD, startD, currentUser,cars, "IN ATTESA");
-        ReservationsDAO.insertReservation(reservations);
-
-        response.sendRedirect("ParkServlet?azione=listR");
-        return;
-    }
-
-    private void addCar(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        //lettura secondo comando
+        String comando= request.getParameter("comando");
 
         //lettura dati inviati da form
         String licensePlate= request.getParameter("licensePlate");
@@ -250,79 +187,30 @@ public class ParkServlet extends HttpServlet {
         String type= request.getParameter("type");
         String year= request.getParameter("year");
 
+        switch (comando) { //verifico il contenuto del parametro azione e a seconda del suo contenuto eseguo un azione
 
-        Cars cars = new Cars(type,manufacturer,model,year,licensePlate);
-        CarsDAO.insertCar(cars);
+            case "add":
+
+                Cars cars = new Cars(type,manufacturer,model,year,licensePlate);
+                CarsDAO.insertCar(cars);
+
+                break;
+
+            case "edit":
+                // recupera l'id della prenotazione
+                Cars updateCar = CarsDAO.getCarId(request.getParameter("carID"));
+
+                CarsDAO.updateCar(updateCar,licensePlate,manufacturer,model,type,year);
+                break;
+        }
+
+
+
 
         response.sendRedirect("ParkServlet?azione=listC");
         return;
     }
 
-    private void updateReservation(HttpServletRequest request, HttpServletResponse response) throws Exception{
-
-        //lettura dati inviati da form
-        String startDate= request.getParameter("newStartDate");
-        String endDate= request.getParameter("newEndDate");
-
-        // converte le date
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date startD = format.parse(startDate);
-        Date endD = format.parse(endDate);
-
-        // recupera l'id della prenotazione
-        Reservations updateReservation = ReservationsDAO.getIDReservation(request.getParameter("reservationID"));
-
-        ReservationsDAO.updateReservation(updateReservation, startD, endD);
-
-
-        response.sendRedirect("ParkServlet?azione=listR");
-
-    }
-
-    private void deleteReservation(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        //lettura dati inviati da form
-        String reservationID= request.getParameter("reservationID");
-
-        ReservationsDAO.deleteReservation(reservationID);
-
-        response.sendRedirect("ParkServlet?azione=listR");
-        return;
-    }
-
-    private void confirmedReservation(HttpServletRequest request, HttpServletResponse response) throws Exception{
-
-        String conferma = request.getParameter("conferma");
-
-        Reservations confirmed = ReservationsDAO.getIDReservation(request.getParameter("reservationID"));
-
-        ReservationsDAO.confirmedReservation(confirmed, conferma);
-
-
-        response.sendRedirect("UserServlet?azione=list");
-
-    }
-
-
-    private void updateCar(HttpServletRequest request, HttpServletResponse response) throws Exception{
-
-        //lettura dati inviati da form
-        String licensePlate= request.getParameter("licensePlate");
-        String manufacturer= request.getParameter("manufacturer");
-        String model= request.getParameter("model");
-        String type= request.getParameter("type");
-        String year= request.getParameter("year");
-
-
-        // recupera l'id della prenotazione
-        Cars updateCar = CarsDAO.getCarId(request.getParameter("carID"));
-
-        CarsDAO.updateCar(updateCar,licensePlate,manufacturer,model,type,year);
-
-
-        response.sendRedirect("ParkServlet?azione=listC");
-
-    }
 
     private void deleteCar(HttpServletRequest request, HttpServletResponse response) throws Exception {
 

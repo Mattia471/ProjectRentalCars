@@ -54,15 +54,15 @@
 
     <div class="container">
         <h2 class="text-center">Modifica Prenotazione</h2>
-        <form action="ParkServlet" method="POST">
+        <form action="ReservationServlet" method="POST">
             <div class="row" style="padding-top: 20px">
                 <div class="col">
                     <b>Data di inizio noleggio</b>
-                    <input type="date"  name="newStartDate" class="form-control" value="${infoReservation.start_date}" required>
+                    <input type="date"  name="startDate" class="form-control" value="${infoReservation.startDate}" required>
                 </div>
                 <div class="col">
                     <b>Data di consegna</b>
-                    <input type="date" name="newEndDate" class="form-control" value="${infoReservation.end_date}" required>
+                    <input type="date" name="endDate" class="form-control" value="${infoReservation.endDate}" required>
                 </div>
             </div>
 
@@ -73,7 +73,8 @@
                     <input type="submit" class="form-control btn btn-success" value="Modifica Prenotazione">
                 </div>
             </div>
-            <input type="text" name="azione" value="editReservation" hidden>
+            <input type="text" name="comando" value="edit" hidden>
+            <input type="text" name="azione" value="manageReservation" hidden>
         </form>
     </div>
 </body>

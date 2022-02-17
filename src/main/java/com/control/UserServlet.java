@@ -1,8 +1,12 @@
 package com.control;
 
 
+import com.dao.CarsDAO;
+import com.dao.ReservationsDAO;
 import com.dao.UsersDAO;
 
+import com.entities.Cars;
+import com.entities.Reservations;
 import com.entities.Users;
 
 import javax.servlet.*;
@@ -53,7 +57,6 @@ public class UserServlet extends HttpServlet {
     }
 
     private void listUsers(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        UsersDAO userDao = new UsersDAO();
         List<Users> customers = UsersDAO.getUsers();
         request.setAttribute("listUsers", customers);
         RequestDispatcher dispatcher = request.getRequestDispatcher("admin_home.jsp");
@@ -103,7 +106,7 @@ public class UserServlet extends HttpServlet {
                 if(userLog.isAdmin()) { //omesso ==true
                     response.sendRedirect("UserServlet"); //accesso eseguito vai alla pagina
                 }else{
-                    response.sendRedirect("ParkServlet"); //accesso eseguito vai alla pagina
+                    response.sendRedirect("ReservationServlet"); //accesso eseguito vai alla pagina
                 }
 
             }else{
@@ -154,12 +157,8 @@ public class UserServlet extends HttpServlet {
 
             switch (azione) { //verifico il contenuto del parametro azione e a seconda del suo contenuto eseguo un azione
 
-                case "addUser":
-                    addUser(request, response);
-                    break;
-
-                case "updateUser":
-                    updateUser(request, response);
+                case "manageUser":
+                    manageUser(request, response);
                     break;
 
                 case "deleteUser":
@@ -173,42 +172,43 @@ public class UserServlet extends HttpServlet {
         }
     }
 
-    private void addUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        //lettura dati inviati da form
-        String name= request.getParameter("name");
-        String surname= request.getParameter("surname");
-        String birth= request.getParameter("birthdate");
-        String email= request.getParameter("email");
-        String password= request.getParameter("password");
-
-        // converte data
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date birthdate = format.parse(birth);
-
-
-        Users users = new Users(name,surname,email,password,birthdate);
-        UsersDAO.insertUser(users);
-
-        response.sendRedirect("UserServlet?azione=list");
-        return;
-    }
-
-    private void updateUser(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    private void manageUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         //Recuperi la sessione dell'utente
         HttpSession session = request.getSession();
         Users currentUser = (Users) session.getAttribute("user");
 
+        //lettura secondo comando
+        String comando= request.getParameter("comando");
 
-        String name = request.getParameter("name");
-        String surname = request.getParameter("surname");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        //lettura dati inviati da form
+        String name= request.getParameter("name");
+        String surname= request.getParameter("surname");
+        String email= request.getParameter("email");
+        String password= request.getParameter("password");
 
-        Users updateUsers = UsersDAO.getUser(request.getParameter("userId"));
 
-        UsersDAO.updateUser(updateUsers, name, surname, email, password);
+
+        switch (comando) { //verifico il contenuto del parametro azione e a seconda del suo contenuto eseguo un azione
+
+            case "add":
+                String birth= request.getParameter("birthdate");
+                // converte data
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                Date birthdate = format.parse(birth);
+
+                Users users = new Users(name,surname,email,password,birthdate);
+                UsersDAO.insertUser(users);
+
+                break;
+
+            case "edit":
+                Users updateUsers = UsersDAO.getUser(request.getParameter("userId"));
+
+                UsersDAO.updateUser(updateUsers, name, surname, email, password);
+
+                break;
+        }
 
         if(currentUser.isAdmin()){
             response.sendRedirect("UserServlet?azione=list");
@@ -216,7 +216,10 @@ public class UserServlet extends HttpServlet {
             response.sendRedirect("UserServlet?azione=profile");
         }
 
+
+        return;
     }
+
 
     private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
 

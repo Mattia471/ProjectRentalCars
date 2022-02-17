@@ -33,7 +33,7 @@
                         </c:url>
                     </c:when>
                     <c:otherwise>
-                        <c:url var="userHome" value="ParkServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
+                        <c:url var="userHome" value="ReservationServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
                             <c:param name="azione" value="listR"/>
                         </c:url>
                     </c:otherwise>
@@ -63,24 +63,15 @@
 
 
     <div class="container">
-        <h2 class="text-center">Nuova Prenotazione</h2>
-        <form action="ParkServlet" method="GET">
-            <div class="row" style="padding-top: 20px">
-                <div class="col">
-                    <b>Data di inizio noleggio</b>
-                    <input type="date"  name="startDate" class="form-control" required>
-                </div>
-                <div class="col">
-                    <b>Data di consegna</b>
-                    <input type="date" name="endDate" class="form-control" required>
-                </div>
-            </div>
+        <h2 class="text-center">Scegli l'auto da noleggiare</h2>
+        <form action="ReservationServlet" method="POST">
 
             <div class="row">
                 <div class="col">
                     <table class="table" >
                         <thead class="thead-dark table-striped">
                         <tr>
+                            <th scope="col">#</th>
                             <th scope="col">Targa</th>
                             <th scope="col">Marchio</th>
                             <th scope="col">Modello</th>
@@ -90,8 +81,8 @@
                         </thead>
                         <tbody>
                         <c:forEach var="tempCar" items="${listCar}"> <!--UTILIZZARE JSTL SU JSP-->
-                            <tr>
-                                <th scope="row"><input type="radio" name="car" value="${tempCar.id}"></th>
+                            <tr class="bg-success text-white">
+                                <th scope="row"><input type="radio" name="car" value="${tempCar.id}" required></th>
                                 <td>${tempCar.licensePlate}</td>
                                 <td>${tempCar.manufacturer}</td>
                                 <td>${tempCar.model} </td>
@@ -103,13 +94,23 @@
                     </table>
                 </div>
             </div>
-            <br>
+            <br><hr>
+            <div class="row">
+                <b>Date scelte per il noleggio</b>
+                <div class="col">
+                    <input type="date" name="startDate" class="form-control border-success" value="${startDate}" >
+                </div>
+                <div class="col">
+                    <input type="date" name="endDate" class="form-control border-success" value="${endDate}" >
+                </div>
+            </div><br><hr>
             <div class="row">
                 <div class="col">
                     <input type="submit" class="form-control btn btn-success" value="Conferma Prenotazione">
                 </div>
             </div>
-            <input type="text" name="azione" value="addReservation" hidden>
+            <input type="text" name="comando" value="add" hidden>
+            <input type="text" name="azione" value="manageReservation" hidden>
         </form>
     </div>
 </body>
