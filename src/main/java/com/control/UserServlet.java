@@ -217,7 +217,6 @@ public class UserServlet extends HttpServlet {
         }
 
 
-        return;
     }
 
 
@@ -229,7 +228,6 @@ public class UserServlet extends HttpServlet {
         UsersDAO.deleteUser(userID);
 
         response.sendRedirect("UserServlet?azione=list");
-        return;
     }
 
 

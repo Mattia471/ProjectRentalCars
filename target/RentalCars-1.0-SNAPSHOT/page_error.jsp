@@ -59,8 +59,7 @@
     <c:choose>
       <c:when test="${!empty(errorLog)}">
         <div class="row">
-          <center><span class="alert alert-danger">${errorLog}</span></center><br>
-          <a href="request_add_reservation.jsp" class="btn btn-success">Torna all'inserimento delle date</a>
+          <center><span class="alert alert-danger">${errorLog}</span></center>
         </div>
       </c:when>
     </c:choose>

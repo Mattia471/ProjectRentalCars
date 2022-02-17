@@ -182,7 +182,6 @@ public class ReservationServlet extends HttpServlet {
                 break;
         }
         response.sendRedirect("ReservationServlet?azione=listR");
-        return;
     }
 
 
@@ -197,7 +196,6 @@ public class ReservationServlet extends HttpServlet {
         ReservationsDAO.deleteReservation(reservationID);
 
         response.sendRedirect("ReservationServlet?azione=listR");
-        return;
     }
 
     private void confirmedReservation(HttpServletRequest request, HttpServletResponse response) throws Exception{

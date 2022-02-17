@@ -208,7 +208,6 @@ public class ParkServlet extends HttpServlet {
 
 
         response.sendRedirect("ParkServlet?azione=listC");
-        return;
     }
 
 
@@ -220,6 +219,5 @@ public class ParkServlet extends HttpServlet {
         CarsDAO.deleteCar(carID);
 
         response.sendRedirect("ParkServlet?azione=listC");
-        return;
     }
 }
