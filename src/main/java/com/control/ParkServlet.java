@@ -86,6 +86,7 @@ public class ParkServlet extends HttpServlet {
 
 
     private void requestSearchCars(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String comando= request.getParameter("comando");
 
         //lettura dati inviati da form
         String startDate= request.getParameter("startDate");
@@ -95,22 +96,47 @@ public class ParkServlet extends HttpServlet {
         Date endD = format.parse(endDate);
         Date startD = format.parse(startDate);
 
+        if(comando=="add") {
 
-        if(startD.before(endD) && endD.after(startD)){ //se la data di inizio e prima della data di fine e viceversa
 
-            List<Cars> cars = CarsDAO.getCarsAvailable(endD,startD);
-            request.setAttribute("listCar", cars);
-            request.setAttribute("startDate", startDate);
-            request.setAttribute("endDate", endDate);
-            // Send to jsp page
-            RequestDispatcher dispatcher =request.getRequestDispatcher("add_reservation.jsp");
-            dispatcher.forward(request, response);
-        }else{ //altrimenti
-            String errorLog= "Date inserite non valide, per favore reinseriscile correttamente!";
-            request.setAttribute("errorLog", errorLog);
+            if (startD.before(endD) && endD.after(startD)) { //se la data di inizio e prima della data di fine e viceversa
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("page_error.jsp");
-            dispatcher.forward(request, response);
+                List<Cars> cars = CarsDAO.getCarsAvailable(endD, startD);
+                request.setAttribute("listCar", cars);
+                request.setAttribute("startDate", startDate);
+                request.setAttribute("endDate", endDate);
+                // Send to jsp page
+                RequestDispatcher dispatcher = request.getRequestDispatcher("add_reservation.jsp");
+                dispatcher.forward(request, response);
+            } else { //altrimenti
+                String errorLog = "Date inserite non valide, per favore reinseriscile correttamente!";
+                request.setAttribute("errorLog", errorLog);
+
+                RequestDispatcher dispatcher = request.getRequestDispatcher("page_error.jsp");
+                dispatcher.forward(request, response);
+            }
+
+
+        }else{
+            if (startD.before(endD) && endD.after(startD)) { //se la data di inizio e prima della data di fine e viceversa
+
+                String reservationID= request.getParameter("reservationID");
+
+                List<Cars> cars = CarsDAO.getCarsAvailable(endD, startD);
+                request.setAttribute("listCar", cars);
+                request.setAttribute("startDate", startDate);
+                request.setAttribute("endDate", endDate);
+                request.setAttribute("reservationID", reservationID);
+                // Send to jsp page
+                RequestDispatcher dispatcher = request.getRequestDispatcher("add_reservation.jsp");
+                dispatcher.forward(request, response);
+            } else { //altrimenti
+                String errorLog = "Date inserite non valide, per favore reinseriscile correttamente!";
+                request.setAttribute("errorLog", errorLog);
+
+                RequestDispatcher dispatcher = request.getRequestDispatcher("page_error.jsp");
+                dispatcher.forward(request, response);
+            }
         }
 
 

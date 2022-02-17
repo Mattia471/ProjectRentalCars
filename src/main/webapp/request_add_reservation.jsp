@@ -88,6 +88,7 @@
                     <input type="submit" class="form-control btn btn-success" value="Scegli l'auto da noleggiare">
                 </div>
             </div>
+            <input type="text" name="comando" value="add" hidden>
             <input type="text" name="azione" value="requestSearchCars" hidden>
         </form>
     </div>

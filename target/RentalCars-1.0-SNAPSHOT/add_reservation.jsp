@@ -64,6 +64,13 @@
 
     <div class="container">
         <h2 class="text-center">Scegli l'auto da noleggiare</h2>
+        <c:choose>
+            <c:when test="${empty(reservationID)}">
+            </c:when>
+            <c:otherwise>
+                <center><b>Se l'auto che avevi gia scelto non risulta nell'elenco è gia prenotata, puoi comunque sceglierne un'altra</b></center>
+            </c:otherwise>
+        </c:choose>
         <form action="ReservationServlet" method="POST">
 
             <div class="row">
@@ -109,7 +116,15 @@
                     <input type="submit" class="form-control btn btn-success" value="Conferma Prenotazione">
                 </div>
             </div>
-            <input type="text" name="comando" value="add" hidden>
+            <c:choose>
+                <c:when test="${empty(reservationID)}">
+                    <input type="text" name="comando" value="add" hidden>
+                </c:when>
+                <c:otherwise>
+                    <input type="text" name="comando" value="edit" hidden>
+                    <input type="text" name="reservationID" value="${reservationID}" hidden>
+                </c:otherwise>
+            </c:choose>
             <input type="text" name="azione" value="manageReservation" hidden>
         </form>
     </div>

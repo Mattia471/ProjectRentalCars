@@ -105,13 +105,6 @@ public class ReservationsDAO {
     }
 
 
-    public static List<Reservations> getReservationCar(int idCar) {
-        try (Session session = Config.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Reservations as U where carId ="+idCar, Reservations.class).list();
-
-        }
-    }
-
 
 
 

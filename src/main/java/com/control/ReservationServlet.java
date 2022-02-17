@@ -137,7 +137,7 @@ public class ReservationServlet extends HttpServlet {
 
             }
 
-        } catch (Exception e) { //se il codice da errori entra in questo blocco di codici e mostra l'errore
+        } catch (Exception e) {
             throw new ServletException(e);
         }
     }

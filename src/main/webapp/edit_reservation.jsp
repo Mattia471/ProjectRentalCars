@@ -54,7 +54,7 @@
 
     <div class="container">
         <h2 class="text-center">Modifica Prenotazione</h2>
-        <form action="ReservationServlet" method="POST">
+        <form action="ParkServlet" method="GET">
             <div class="row" style="padding-top: 20px">
                 <div class="col">
                     <b>Data di inizio noleggio</b>
@@ -73,8 +73,7 @@
                     <input type="submit" class="form-control btn btn-success" value="Modifica Prenotazione">
                 </div>
             </div>
-            <input type="text" name="comando" value="edit" hidden>
-            <input type="text" name="azione" value="manageReservation" hidden>
+            <input type="text" name="azione" value="requestSearchCars" hidden>
         </form>
     </div>
 </body>
