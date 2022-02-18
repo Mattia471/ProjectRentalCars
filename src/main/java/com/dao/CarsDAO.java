@@ -95,10 +95,12 @@ public class CarsDAO {
     //recupera lista delle auto disponibili
     public static List<Cars> getCarsAvailable(Date endD, Date startD) {
         try (Session session = Config.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Cars as C where not exists (from Reservations as R where R.car = C " +
-                            "and R.startDate= :startD and R.endDate= :endD " +
-                            "or R.startDate<= :startD and R.endDate>= :startD  " +
-                            "or R.startDate>= :startD and R.startDate<= :endD and R.endDate>= :endD )", Cars.class)
+            return session.createQuery("FROM Cars as C where not exists" +
+                            "    (from Reservations as R " +
+                            "    where " +
+                            "    (R.startDate between :startD and :endD " +
+                            "       or R.endDate between :startD and :endD " +
+                            "        or R.startDate< :startD and R.endDate> :endD)  AND  R.car = C )", Cars.class)
                     .setParameter("startD", startD)
                     .setParameter("endD", endD)
                     .list();

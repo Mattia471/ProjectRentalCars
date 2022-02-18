@@ -81,8 +81,10 @@ public class UserServlet extends HttpServlet {
 
         Users users = UsersDAO.getUser(userId);
 
+        String comando="edit";
+        request.setAttribute("comando", comando);
         request.setAttribute("accountUser", users);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("update_user.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("manageUser.jsp");
         dispatcher.forward(request, response);
 
     }
@@ -199,13 +201,12 @@ public class UserServlet extends HttpServlet {
 
                 Users users = new Users(name,surname,email,password,birthdate);
                 UsersDAO.insertUser(users);
-
                 break;
 
             case "edit":
                 Users updateUsers = UsersDAO.getUser(request.getParameter("userId"));
-
-                UsersDAO.updateUser(updateUsers, name, surname, email, password);
+                updateUsers.setName(name);
+                UsersDAO.manageUser(updateUsers);
 
                 break;
         }

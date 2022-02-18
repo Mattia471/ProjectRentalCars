@@ -13,7 +13,7 @@
 <html>
 <head>
     <title>Nuova Prenotazione</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel='stylesheet' href='webjars/bootstrap/5.1.3/css/bootstrap.min.css'>
 
 </head>
 <body class="bg-light">
@@ -63,16 +63,16 @@
 
 
     <div class="container">
-        <h2 class="text-center">Nuova Auto</h2>
+        <h2 class="text-center">Modifica Auto</h2>
         <form action="ParkServlet" method="POST">
             <div class="row" style="padding-top: 20px">
                 <div class="col">
                     <b>Targa</b>
-                    <input type="text"  name="licensePlate" class="form-control" required>
+                    <input type="text"  name="licensePlate" class="form-control"  value="${infoCar.licensePlate}" required>
                 </div>
                 <div class="col">
                     <b>Marchio</b>
-                    <input type="text" name="manufacturer" class="form-control" required>
+                    <input type="text" name="manufacturer" class="form-control" value="${infoCar.manufacturer}" required>
                 </div>
             </div>
 
@@ -85,15 +85,15 @@
             <div class="row">
                 <div class="col">
                     <b>Modello</b>
-                    <input type="text"  name="model" class="form-control" required>
+                    <input type="text"  name="model" class="form-control" value="${infoCar.model}" required>
                 </div>
                 <div class="col">
                     <b>Tipo</b>
-                    <input type="text" name="type" class="form-control" required>
+                    <input type="text" name="type" class="form-control" value="${infoCar.type}" required>
                 </div>
                 <div class="col">
                     <b>Anno</b>
-                    <input type="text" name="year" class="form-control" required>
+                    <input type="text" name="year" class="form-control" value="${infoCar.year}" required>
                 </div>
             </div><br>
             <div class="row">
@@ -101,7 +101,15 @@
                     <input type="submit" class="form-control btn btn-success" value="Inserisci nuova auto">
                 </div>
             </div>
-            <input type="text" name="comando" value="add" hidden>
+            <c:choose>
+                <c:when test="${comando=='edit'}">
+                    <input type="text" name="carID" value="${infoCar.id}" hidden>
+                    <input type="text" name="comando" value="${comando}" hidden>
+                </c:when>
+                <c:otherwise>
+                    <input type="text" name="comando" value="add" hidden>
+                </c:otherwise>
+            </c:choose>
             <input type="text" name="azione" value="manageCar" hidden>
         </form>
     </div>

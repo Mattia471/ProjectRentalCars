@@ -63,8 +63,10 @@ public class ParkServlet extends HttpServlet {
 
         Cars cars = CarsDAO.getCarId(carID);
 
+        String comando= "edit";
         request.setAttribute("infoCar", cars);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("edit_car.jsp");
+        request.setAttribute("comando", comando);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("manageCar.jsp");
         dispatcher.forward(request, response);
 
     }

@@ -13,7 +13,7 @@
 <html>
 <head>
   <title>Home</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel='stylesheet' href='webjars/bootstrap/5.1.3/css/bootstrap.min.css'>
 
 </head>
 <body class="bg-light">
@@ -86,12 +86,19 @@
       </div>
       <div class="col">
         <b>Data di nascita:</b>
-        <input type="date" class="form-control" value="${accountUser.birthdate}">
+        <input type="date" name="birthdate" class="form-control" value="${accountUser.birthdate}">
       </div>
     </div><br>
     <div class="row">
-      <input type="text" value="${accountUser.id}" name="userId" hidden>
-      <input type="text" name="comando" value="edit" hidden>
+      <c:choose>
+        <c:when test="${comando=='edit'}">
+          <input type="text" value="${accountUser.id}" name="userId" hidden>
+          <input type="text" name="comando" value="${comando}" hidden>
+        </c:when>
+        <c:otherwise>
+          <input type="text" name="comando" value="add" hidden>
+        </c:otherwise>
+      </c:choose>
       <input type="text" name="azione" value="manageUser" hidden>
       <input type="submit" value="Salve Modifiche" class="form-control btn btn-success">
     </div>

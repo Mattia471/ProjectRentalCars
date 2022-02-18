@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<!--viene recuperata la lingua locale -->
+<!--viene settata la lingua locale -->
 <c:set var="theLocale"
        value="${not empty param.theLocale ? param.theLocale : pageContext.request.locale}"
        scope="session" />
@@ -14,6 +14,7 @@
 <head>
   <title>Home</title>
   <link rel='stylesheet' href='webjars/bootstrap/5.1.3/css/bootstrap.min.css'>
+
 </head>
 <body class="bg-light">
 
@@ -27,7 +28,7 @@
       <li class="nav-item">
         <c:choose>
           <c:when test="${user.isAdmin}">
-            <c:url var="userHome" value="ReservationServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
+            <c:url var="userHome" value="UserServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
               <c:param name="azione" value="list"/>
             </c:url>
           </c:when>
@@ -61,45 +62,47 @@
 
 
 <div class="container-fluid">
-  <div class="row" style="padding-top: 10px">
-    <div class="col">
-      <b style="font-size: 25px">Prenotazioni </b>
+  <br>
+  <h2>Informazioni Utente</h2>
+  <form action="UserServlet" method="POST">
+    <div class="row">
+      <div class="col">
+        <b>Nome:</b>
+        <input type="text" name="name" class="form-control" value="${accountUser.name}">
+      </div>
+      <div class="col">
+        <b>Cognome:</b>
+        <input type="text" name="surname" class="form-control" value="${accountUser.surname}">
+      </div>
+      <div class="col">
+        <b>Email:</b>
+        <input type="text" name="email" class="form-control" value="${accountUser.email}">
+      </div>
+    </div><hr>
+    <div class="row">
+      <div class="col">
+        <b>Password:</b>
+        <input type="text" name="password" class="form-control" value="${accountUser.password}">
+      </div>
+      <div class="col">
+        <b>Data di nascita:</b>
+        <input type="date" name="birthdate" class="form-control" value="${accountUser.birthdate}">
+      </div>
+    </div><br>
+    <div class="row">
+      <c:choose>
+        <c:when test="${comando=='edit'}">
+          <input type="text" value="${accountUser.id}" name="userId" hidden>
+          <input type="text" name="comando" value="${comando}" hidden>
+        </c:when>
+        <c:otherwise>
+          <input type="text" name="comando" value="add" hidden>
+        </c:otherwise>
+      </c:choose>
+      <input type="text" name="azione" value="manageUser" hidden>
+      <input type="submit" value="Salve Modifiche" class="form-control btn btn-success">
     </div>
-  </div>
-
-  <table class="table" >
-    <thead class="thead-dark table-striped">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Durata</th>
-      <th scope="col">#</th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach var="tempReservation" items="${listReservations}"> <!--UTILIZZARE JSTL SU JSP-->
-      <tr>
-        <th scope="row">1</th>
-        <td>Dal ${tempReservation.startDate} al ${tempReservation.endDate}</td>
-        <c:choose>
-          <c:when test="${tempReservation.status=='IN ATTESA'}">
-            <c:url var="userHome" value="UserServlet"> <!--UTILIZZATO JSTL per il collegamento alla pagina e il richiamo della servlet-->
-              <c:param name="azione" value="list"/>
-            </c:url>
-            <form action="ReservationServlet" METHOD="post">
-              <input type="text" name="azione" value="confirmedReservation" hidden>
-              <input type="text" name="reservationID" value="${tempReservation.id}" hidden>
-              <td><input type="submit" name="conferma" value="CONFERMATO" class="btn btn-success" >| <input type="submit" name="conferma" value="RIFIUTATO"  class="btn btn-danger" ></td>
-            </form>
-          </c:when>
-          <c:otherwise>
-            <td><span class="badge badge-sm bg-success">${tempReservation.status}</td>
-          </c:otherwise>
-        </c:choose>
-
-      </tr>
-    </c:forEach>
-    </tbody>
-  </table>
+  </form>
 </div>
 
 </body>

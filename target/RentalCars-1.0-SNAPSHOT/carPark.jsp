@@ -13,7 +13,7 @@
 <html>
 <head>
     <title>Parco Auto</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel='stylesheet' href='webjars/bootstrap/5.1.3/css/bootstrap.min.css'>
 
 </head>
 <body class="bg-light">
@@ -69,7 +69,7 @@
         <div class="col">
             <c:choose>
                 <c:when test="${user.isAdmin}">
-                    <a href="add_car.jsp" class="btn btn-dark" style="position: absolute;right: 10px"><fmt:message key="label.carPark" /></a>
+                    <a href="manageCar.jsp" class="btn btn-dark" style="position: absolute;right: 10px"><fmt:message key="label.carPark" /></a>
                 </c:when>
             </c:choose>
         </div>
@@ -82,8 +82,8 @@
             <th scope="col">Modello</th>
             <th scope="col">Tipo</th>
             <th scope="col">Anno</th>
-            <th scope="col">#</th>
-            <th scope="col">#</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
 
         </tr>
         </thead>

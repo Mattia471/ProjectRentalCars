@@ -30,7 +30,9 @@ public class UsersDAO {
         }
     }
 
-    public static void updateUser(Users user,String name,String surname,String email,String password){
+
+
+    public static void manageUser(Users users){
 
         Transaction transaction = null;
         try (Session session = Config.getSessionFactory().openSession()) {
@@ -38,13 +40,10 @@ public class UsersDAO {
             // start a transaction
             transaction = session.beginTransaction();
 
-            // Modifica le informazioni tramite i setter
-            user.setName(name);
-            user.setSurname(surname);
-            user.setEmail(email);
-            user.setPassword(password);
 
-            session.merge(user);
+            // save the student object
+            session.merge(users);
+            // commit transaction
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
